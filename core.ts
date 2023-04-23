@@ -111,9 +111,7 @@ export function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
   attrs?: Partial<HTMLElementTagNameMap[K] & CreateProxyOptions>,
 ) {
   const node = document.createElement<K>(tagName)
-  if (attrs) {
-    Object.assign(node, attrs)
-  }
+  Object.assign(node, attrs)
   return createProxy(node, attrs)
 }
 
@@ -123,9 +121,7 @@ export function createSVGElement<K extends keyof SVGElementTagNameMap>(
   attrs?: Partial<SVGElementTagNameMap[K] & CreateProxyOptions>,
 ) {
   const node = document.createElementNS('http://www.w3.org/2000/svg', tagName)
-  if (attrs) {
-    Object.assign(node, attrs)
-  }
+  Object.assign(node, attrs)
   return createProxy(node, attrs)
 }
 
