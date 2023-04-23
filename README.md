@@ -6,6 +6,8 @@ Develop declarative UI with (opt-in) automatic dependecy tracking without VDOM n
 [![Minified Package Size](https://img.shields.io/bundlephobia/min/dom-proxy)](https://bundlephobia.com/package/dom-proxy)
 [![Minified and Gzipped Package Size](https://img.shields.io/bundlephobia/minzip/dom-proxy)](https://bundlephobia.com/package/dom-proxy)
 
+Demo: https://dom-proxy.surge.sh
+
 ## Installation
 
 You can get dom-proxy via npm:
