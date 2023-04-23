@@ -11,8 +11,7 @@ export function fragment(nodes: Array<Node | { node: Node } | string>) {
 export function createText(value: string = '') {
   const node = document.createTextNode(value)
   const proxy = createProxy(node)
-  Object.assign(proxy, { node })
-  return node
+  return proxy
 }
 
 let watchFn: (() => void) | null = null
@@ -27,10 +26,12 @@ export type CreateProxyOptions = {
   listen?: 'change' | 'input' | false // default 'input'
 }
 
+export type ProxyNode<E> = E & { node: E }
+
 function createProxy<E extends object>(
   node: E,
   options?: CreateProxyOptions,
-): E {
+): ProxyNode<E> {
   const deps = new Map<string, Set<() => void>>()
   const listentEventType = options?.listen ?? 'input'
   const proxy = new Proxy(node, {
@@ -75,7 +76,7 @@ function createProxy<E extends object>(
       return true
     },
   })
-  return proxy
+  return Object.assign(proxy, { node })
 }
 
 export function genCreateElement<K extends keyof HTMLElementTagNameMap>(
@@ -94,7 +95,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
     Object.assign(node, attrs)
   }
   const proxy = createProxy(node, attrs)
-  return Object.assign(proxy, { node })
+  return proxy
 }
 
 export function appendChild(
