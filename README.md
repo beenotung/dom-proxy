@@ -1,5 +1,5 @@
 # live-dom
 
-Develop declarative UI without VDOM nor compiler.
+Develop declarative UI with (opt-in) automatic dependecy tracking without VDOM nor compiler.
 
 (WIP)

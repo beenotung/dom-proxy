@@ -1,35 +1,90 @@
-import { text, br, input, fragment, p } from '../core'
+import {
+  watch,
+  c,
+  t,
+  fragment,
+  input,
+  br,
+  button,
+  p,
+  span,
+  label,
+  h1,
+  h2,
+} from '..'
 
 console.log('ts')
-
-let msg = text('alice')
-document.body.append(msg.node)
-
-document.body.append(br())
-
-let name = input({ type: 'text' })
-document.body.append(name.node)
-
-name.oninput(value => msg(value))
-
-let a = input()
-let b = input()
-let c = text('0')
-
-a.oninput(updateC)
-b.oninput(updateC)
-
-function updateC() {
-  c((+a() || 0) + (+b() || 0))
-}
+console.time('init')
 
 document.body.appendChild(
-  fragment([p({ text: 'a + b = c' }), a, ' + ', b, ' = ', c]),
+  // get the native element from .node property
+  // (only necessary when not wrapped by fragment helper function)
+  h1({ textContent: 'live-dom demo' }).node,
 )
 
-document.body.appendChild(p({ text: 'powered by live-dom' }).node)
+let nameInput = input({ listen: 'change', placeholder: 'guest' })
+let nameSpan = span()
+watch(() => (nameSpan.textContent = nameInput.value || nameInput.placeholder))
 
-setInterval(() => {
-  msg(msg() + '.')
-  // name(msg()?.length?.toString())
-}, 1000)
+let greetMessage = p()
+greetMessage.appendChild(fragment(['hello, ', nameSpan]))
+document.body.appendChild(
+  fragment([
+    h2({ textContent: 'change event demo' }),
+    fragment([label({ textContent: 'name: ' }), nameInput]),
+    br(),
+    greetMessage,
+  ]),
+)
+
+let aInput = input({ type: 'number', value: '0' })
+let bInput = input({ type: 'number', value: '0' })
+let cInput = input({
+  type: 'number',
+  value: '0',
+  readOnly: true,
+  disabled: true,
+})
+
+let aText = t()
+let bText = t()
+let cText = t()
+
+let resetButton = button({ textContent: 'reset', onclick: reset })
+
+function reset() {
+  aInput.value = '0'
+  bInput.value = '0'
+}
+
+watch(() => {
+  cInput.value = String(aInput.valueAsNumber + bInput.valueAsNumber)
+})
+watch(() => (aText.textContent = String(aInput.valueAsNumber)))
+watch(() => (bText.textContent = String(bInput.valueAsNumber)))
+watch(() => (cText.textContent = String(cInput.valueAsNumber)))
+watch(() => {
+  resetButton.disabled =
+    aInput.valueAsNumber === 0 && bInput.valueAsNumber === 0
+})
+
+document.body.appendChild(
+  fragment([
+    h2({ textContent: 'input event demo' }),
+    aInput,
+    ' + ',
+    bInput,
+    ' = ',
+    cInput,
+    br(),
+    aText,
+    ' + ',
+    bText,
+    ' = ',
+    cText,
+    br(),
+    resetButton,
+  ]),
+)
+
+console.timeEnd('init')
