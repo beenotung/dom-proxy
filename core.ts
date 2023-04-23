@@ -16,8 +16,8 @@ export function fragment(nodes: Array<Node | { node: Node } | string>) {
 }
 
 /** @alias t, text */
-export function createText(value: string = '') {
-  const node = document.createTextNode(value)
+export function createText(value: string | number = '') {
+  const node = document.createTextNode(value as string)
   return createProxy(node)
 }
 
