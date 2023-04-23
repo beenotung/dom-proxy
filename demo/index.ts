@@ -21,12 +21,29 @@ document.body.appendChild(
   h1({ textContent: 'live-dom demo' }).node,
 )
 
+let upTimeText = text(0)
+
+let startTime = Date.now()
+setInterval(() => {
+  upTimeText.textContent = ((Date.now() - startTime) / 1000).toFixed(0)
+}, 500)
+
+document.body.appendChild(
+  fragment([h2({ textContent: 'up time' }), upTimeText, ' seconds']),
+)
+
 let nameInput = input({ listen: 'change', placeholder: 'guest' })
-let nameSpan = span()
-watch(() => (nameSpan.textContent = nameInput.value || nameInput.placeholder))
+let nameText = text()
+let greetDotsText = text()
+
+watch(() => (nameText.textContent = nameInput.value || nameInput.placeholder))
+watch(() => {
+  let n = +upTimeText.textContent % 5
+  greetDotsText.textContent = '.'.repeat(n)
+})
 
 let greetMessage = p()
-greetMessage.appendChild(fragment(['hello, ', nameSpan]))
+greetMessage.appendChild(fragment(['hello, ', nameText, greetDotsText]))
 document.body.appendChild(
   fragment([
     h2({ textContent: 'change event demo' }),
@@ -37,7 +54,12 @@ document.body.appendChild(
 )
 
 let aInput = input({ type: 'number', value: '0' })
-let bInput = input({ type: 'number', value: '0' })
+let bInput = input({
+  type: 'number',
+  value: '0',
+  readOnly: true,
+  disabled: true,
+})
 let cInput = input({
   type: 'number',
   value: '0',
@@ -45,27 +67,32 @@ let cInput = input({
   disabled: true,
 })
 
-let aText = text()
-let bText = text()
-let cText = text()
-
-let resetButton = button({ textContent: 'reset', onclick: reset })
-
-function reset() {
-  aInput.value = '0'
-  bInput.value = '0'
-}
+watch(() => {
+  bInput.value = upTimeText.textContent
+})
 
 watch(() => {
   cInput.value = String(aInput.valueAsNumber + bInput.valueAsNumber)
 })
+
+let aText = text()
+let bText = text()
+let cText = text()
+
 watch(() => (aText.textContent = String(aInput.valueAsNumber)))
 watch(() => (bText.textContent = String(bInput.valueAsNumber)))
 watch(() => (cText.textContent = String(cInput.valueAsNumber)))
+
+let resetButton = button({ textContent: 'reset', onclick: reset })
+
 watch(() => {
   resetButton.disabled =
     aInput.valueAsNumber === 0 && bInput.valueAsNumber === 0
 })
+
+function reset() {
+  aInput.value = '0'
+}
 
 document.body.appendChild(
   fragment([
