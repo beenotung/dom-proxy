@@ -5,6 +5,7 @@ import {
   input,
   br,
   button,
+  a,
   p,
   span,
   label,
@@ -15,11 +16,18 @@ import {
 console.log('ts')
 console.time('init')
 
-document.body.appendChild(
-  // get the native element from .node property
-  // (only necessary when not wrapped by fragment helper function)
-  h1({ textContent: 'live-dom demo' }).node,
+// get the native element from .node property
+// (only necessary when not wrapped by fragment helper function)
+let title = h1({ textContent: 'dom-proxy demo' }).node
+
+title.appendChild(
+  fragment([
+    a({ textContent: 'git', href: 'https://github.com/beenotung/dom-proxy' }),
+    a({ textContent: 'npm', href: 'https://www.npmjs.com/package/dom-proxy' }),
+  ]),
 )
+
+document.body.appendChild(title)
 
 let upTimeText = text(0)
 
