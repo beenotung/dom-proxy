@@ -1,17 +1,35 @@
 {
   "name": "dom-proxy",
   "version": "0.2.0",
-  "description": "",
+  "description": "Develop declarative UI with (opt-in) automatic dependecy tracking without VDOM nor compiler.",
+  "keywords": [
+    "DOM",
+    "proxy",
+    "reactive",
+    "declaraive",
+    "dependency tracking",
+    "state management",
+    "typescript",
+    "lightweight"
+  ],
+  "author": "Beeno Tung <aabbcc1241@yahoo.com.hk> (https://beeno-tung.surge.sh)",
+  "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beenotung/dom-proxy.git"
+  },
+  "homepage": "https://github.com/beenotung/dom-proxy#readme",
+  "bugs": {
+    "url": "https://github.com/beenotung/dom-proxy/issues"
+  },
   "main": "index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "start": "esbuild --bundle --serve demo/index.ts --outfile=demo/index.js",
     "format": "prettier --write . && format-json-cli",
     "test": "tsc --noEmit",
     "build": "tsc -p ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.14.5",
     "esbuild": "^0.17.10",
