@@ -128,6 +128,7 @@ If you need more helper functions, you can defined them with `genCreateHTMLEleme
 ```typescript
 const br: PartialCreateElement<HTMLBRElement>
 const p: PartialCreateElement<HTMLParagraphElement>
+const a: PartialCreateElement<HTMLAnchorElement>
 const input: PartialCreateElement<HTMLInputElement>
 const label: PartialCreateElement<HTMLLabelElement>
 const span: PartialCreateElement<HTMLSpanElement>
