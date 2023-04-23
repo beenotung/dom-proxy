@@ -8,8 +8,32 @@ Develop declarative UI with (opt-in) automatic dependecy tracking without VDOM n
 
 ## Installation
 
+You can get dom-proxy via npm:
+
 ```bash
 npm install dom-proxy
+```
+
+Then import from typescript using named import or star import
+
+```typescript
+import { watch } from 'dom-proxy'
+import * as domProxy from 'dom-proxy'
+```
+
+Or import from javascript
+
+```javascript
+var domProxy = require('dom-proxy')
+```
+
+Or get dom-proxy via CDN:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/dom-proxy@1/browser.min.js"></script>
+<script>
+  console.log(typeof domProxy.watch) // function
+</script>
 ```
 
 ## Usage Example

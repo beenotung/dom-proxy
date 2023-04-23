@@ -33,7 +33,9 @@
     "start": "esbuild --bundle --serve demo/index.ts --outfile=demo/index.js",
     "format": "prettier --write . && format-json-cli",
     "test": "tsc --noEmit",
-    "build": "tsc -p ."
+    "build": "tsc && npm run esbuild",
+    "tsc": "tsc -p .",
+    "esbuild": "esbuild --bundle browser.ts --outfile=browser.js"
   },
   "devDependencies": {
     "@types/node": "^18.14.5",
