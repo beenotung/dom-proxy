@@ -1,6 +1,6 @@
 {
-  "name": "live-dom",
-  "version": "1.0.0",
+  "name": "dom-proxy",
+  "version": "0.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
