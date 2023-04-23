@@ -33,8 +33,9 @@
     "start": "esbuild --bundle --serve demo/index.ts --outfile=demo/index.js",
     "format": "prettier --write . && format-json-cli",
     "test": "tsc --noEmit",
-    "build": "tsc && npm run esbuild",
-    "tsc": "tsc -p .",
+    "clean": "rimraf *.js *.d.ts *.tsbuildinfo",
+    "build": "npm run tsc && npm run esbuild",
+    "tsc": "npm run clean && tsc -p .",
     "esbuild": "esbuild --bundle browser.ts --outfile=browser.js"
   },
   "devDependencies": {
@@ -42,6 +43,7 @@
     "esbuild": "^0.17.10",
     "format-json-cli": "^1.0.1",
     "prettier": "^2.8.7",
+    "rimraf": "^5.0.0",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.5"

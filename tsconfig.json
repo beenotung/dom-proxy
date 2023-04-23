@@ -9,6 +9,9 @@
     "skipLibCheck": true,
     "incremental": true
   },
+  "include": [
+    "index.ts"
+  ],
   "exclude": [
     "demo"
   ]
