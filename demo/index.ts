@@ -1,7 +1,6 @@
 import {
   watch,
-  c,
-  t,
+  text,
   fragment,
   input,
   br,
@@ -46,9 +45,9 @@ let cInput = input({
   disabled: true,
 })
 
-let aText = t()
-let bText = t()
-let cText = t()
+let aText = text()
+let bText = text()
+let cText = text()
 
 let resetButton = button({ textContent: 'reset', onclick: reset })
 

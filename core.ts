@@ -1,4 +1,11 @@
-export { createElement as c, createText as t }
+export {
+  createText as t,
+  createText as text,
+  createHTMLElement as h,
+  createHTMLElement as html,
+  createSVGElement as s,
+  createSVGElement as svg,
+}
 
 export function fragment(nodes: Array<Node | { node: Node } | string>) {
   const fragment = document.createDocumentFragment()
@@ -8,14 +15,15 @@ export function fragment(nodes: Array<Node | { node: Node } | string>) {
   return fragment
 }
 
+/** @alias t, text */
 export function createText(value: string = '') {
   const node = document.createTextNode(value)
-  const proxy = createProxy(node)
-  return proxy
+  return createProxy(node)
 }
 
 let watchFn: (() => void) | null = null
 
+/** @description run once immediately, auto track dependency and re-run */
 export function watch(fn: () => void) {
   watchFn = fn
   fn()
@@ -79,14 +87,26 @@ function createProxy<E extends object>(
   return Object.assign(proxy, { node })
 }
 
-export function genCreateElement<K extends keyof HTMLElementTagNameMap>(
+export type PartialCreateElement<E> = (
+  attrs?: Partial<E & CreateProxyOptions>,
+) => ProxyNode<E>
+
+/** @description higher-function, partially applied createHTMLElement */
+export function genCreateHTMLElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
-) {
-  return (attrs?: Partial<HTMLElementTagNameMap[K]> & CreateProxyOptions) =>
-    createElement(tagName, attrs)
+): PartialCreateElement<HTMLElementTagNameMap[K]> {
+  return attrs => createHTMLElement(tagName, attrs)
 }
 
-export function createElement<K extends keyof HTMLElementTagNameMap>(
+/** @description higher-function, partially applied createSVGElement */
+export function genCreateSVGElement<K extends keyof SVGElementTagNameMap>(
+  tagName: K,
+): PartialCreateElement<SVGElementTagNameMap[K]> {
+  return attrs => createSVGElement(tagName, attrs)
+}
+
+/** @alias h, html */
+export function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
   attrs?: Partial<HTMLElementTagNameMap[K] & CreateProxyOptions>,
 ) {
@@ -94,8 +114,19 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
   if (attrs) {
     Object.assign(node, attrs)
   }
-  const proxy = createProxy(node, attrs)
-  return proxy
+  return createProxy(node, attrs)
+}
+
+/** @alias s, svg */
+export function createSVGElement<K extends keyof SVGElementTagNameMap>(
+  tagName: K,
+  attrs?: Partial<SVGElementTagNameMap[K] & CreateProxyOptions>,
+) {
+  const node = document.createElementNS('http://www.w3.org/2000/svg', tagName)
+  if (attrs) {
+    Object.assign(node, attrs)
+  }
+  return createProxy(node, attrs)
 }
 
 export function appendChild(
