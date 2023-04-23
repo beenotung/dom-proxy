@@ -7,7 +7,9 @@ export {
   createSVGElement as svg,
 }
 
-export function fragment(nodes: Array<Node | { node: Node } | string>) {
+export function fragment(
+  nodes: Array<Node | { node: Node } | string | number>,
+) {
   const fragment = document.createDocumentFragment()
   for (const node of nodes) {
     appendChild(fragment, node)
