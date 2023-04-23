@@ -1,2 +1,6 @@
 node_modules
 pnpm-lock.yaml
+*.tgz
+*.js
+*.d.ts
+*.tsbuildinfo
