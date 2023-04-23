@@ -86,8 +86,7 @@ watch(() => (cText.textContent = String(cInput.valueAsNumber)))
 let resetButton = button({ textContent: 'reset', onclick: reset })
 
 watch(() => {
-  resetButton.disabled =
-    aInput.valueAsNumber === 0 && bInput.valueAsNumber === 0
+  resetButton.disabled = aInput.valueAsNumber === 0
 })
 
 function reset() {
