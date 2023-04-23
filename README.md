@@ -71,6 +71,10 @@ function watch(fn: Function): void
 ### Creation functions
 
 ```typescript
+function fragment(
+  nodes: Array<Node | ProxyNode | string | number>,
+): DocumentFragment
+
 /** @alias t, text */
 function createText(value?: string | number): ProxyNode<Text>
 
