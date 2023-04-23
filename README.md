@@ -1,6 +1,6 @@
 # dom-proxy
 
-Develop declarative UI with (opt-in) automatic dependecy tracking without VDOM nor compiler.
+Develop declarative UI with (opt-in) automatic dependecy tracking without boilerplate code, VDOM, nor compiler.
 
 [![npm Package Version](https://img.shields.io/npm/v/dom-proxy)](https://www.npmjs.com/package/dom-proxy)
 [![Minified Package Size](https://img.shields.io/bundlephobia/min/dom-proxy)](https://bundlephobia.com/package/dom-proxy)
@@ -16,20 +16,20 @@ You can get dom-proxy via npm:
 npm install dom-proxy
 ```
 
-Then import from typescript using named import or star import
+Then import from typescript using named import or star import:
 
 ```typescript
 import { watch } from 'dom-proxy'
 import * as domProxy from 'dom-proxy'
 ```
 
-Or import from javascript
+Or import from javascript:
 
 ```javascript
 var domProxy = require('dom-proxy')
 ```
 
-Or get dom-proxy via CDN:
+You can also get dom-proxy via CDN:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/dom-proxy@1/browser.min.js"></script>
@@ -40,6 +40,10 @@ Or get dom-proxy via CDN:
 
 ## Usage Example
 
+This example consists of a input and text message.
+
+With the `watch()` function, the text message is initialied and updated according to the input value. We don't need to specify the dependency explicitly.
+
 More examples can be found in [./demo/index.ts](demo/index.ts)
 
 ```typescript
@@ -47,13 +51,22 @@ import { watch, input, span, label, fragment } from 'dom-proxy'
 
 let nameInput = input({ placeholder: 'guest' })
 let nameSpan = span()
-watch(() => (nameSpan.textContent = nameInput.value || nameInput.placeholder))
+
+watch(() => {
+  // the read-dependencies are tracked automatically
+  nameSpan.textContent = nameInput.value || nameInput.placeholder
+})
 
 let greetMessage = p()
 greetMessage.appendChild(fragment(['hello, ', nameSpan]))
 
 document.body.appendChild(
-  fragment([label({ textContent: 'name: ' }), nameInput, greetMessage]),
+  fragment([
+    // use a DocumentFragment to contain the elements
+    label({ textContent: 'name: ' }),
+    nameInput,
+    greetMessage,
+  ]),
 )
 ```
 
