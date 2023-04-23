@@ -7,9 +7,7 @@ export {
   createSVGElement as svg,
 }
 
-export function fragment(
-  nodes: Array<Node | { node: Node } | string | number>,
-) {
+export function fragment(nodes: NodeChild[]) {
   const fragment = document.createDocumentFragment()
   for (const node of nodes) {
     appendChild(fragment, node)
@@ -38,7 +36,7 @@ export type CreateProxyOptions = {
 
 export type ProxyNode<E> = E & { node: E }
 
-function createProxy<E extends object>(
+export function createProxy<E extends Node>(
   node: E,
   options?: CreateProxyOptions,
 ): ProxyNode<E> {
@@ -46,7 +44,6 @@ function createProxy<E extends object>(
   const listentEventType = options?.listen ?? 'input'
   const proxy = new Proxy(node, {
     get(target, p, receiver) {
-      const value = (target as any)[p]
       if (listentEventType && watchFn && typeof p === 'string') {
         const key =
           p === 'value' || p === 'valueAsNumber' || p === 'valueAsDate'
@@ -54,7 +51,7 @@ function createProxy<E extends object>(
             : p
         const fn = watchFn
         if (key === 'value') {
-          ;(target as HTMLInputElement).addEventListener(
+          target.addEventListener(
             listentEventType,
             // wrap the function to avoid the default behavior be cancelled
             // if the inline-function returns false
@@ -68,13 +65,14 @@ function createProxy<E extends object>(
         }
         fns.add(fn)
       }
+      const value = target[p as keyof E]
       if (typeof value === 'function') {
         return value.bind(target)
       }
       return value
     },
     set(target, p, value, receiver) {
-      ;(target as any)[p] = value
+      target[p as keyof E] = value
       if (typeof p === 'string') {
         const fns = deps.get(p)
         if (fns) {
@@ -89,42 +87,63 @@ function createProxy<E extends object>(
   return Object.assign(proxy, { node })
 }
 
+export type NodeChild = Node | { node: Node } | string | number
+
+export type CreateElementOptions<E> = Partial<E> & CreateProxyOptions
+
 export type PartialCreateElement<E> = (
-  attrs?: Partial<E & CreateProxyOptions>,
+  attrs?: CreateElementOptions<E>,
+  children?: NodeChild[],
 ) => ProxyNode<E>
 
 /** @description higher-function, partially applied createHTMLElement */
 export function genCreateHTMLElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
 ): PartialCreateElement<HTMLElementTagNameMap[K]> {
-  return attrs => createHTMLElement(tagName, attrs)
+  return (attrs, children) => createHTMLElement(tagName, attrs, children)
 }
 
 /** @description higher-function, partially applied createSVGElement */
 export function genCreateSVGElement<K extends keyof SVGElementTagNameMap>(
   tagName: K,
 ): PartialCreateElement<SVGElementTagNameMap[K]> {
-  return attrs => createSVGElement(tagName, attrs)
+  return (attrs, children) => createSVGElement(tagName, attrs, children)
 }
 
 /** @alias h, html */
 export function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
-  attrs?: Partial<HTMLElementTagNameMap[K] & CreateProxyOptions>,
+  attrs?: CreateElementOptions<HTMLElementTagNameMap[K]>,
+  children?: NodeChild[],
 ) {
   const node = document.createElement<K>(tagName)
-  Object.assign(node, attrs)
+  applyAttrs(node, attrs, children)
   return createProxy(node, attrs)
 }
 
 /** @alias s, svg */
 export function createSVGElement<K extends keyof SVGElementTagNameMap>(
   tagName: K,
-  attrs?: Partial<SVGElementTagNameMap[K] & CreateProxyOptions>,
+  attrs?: CreateElementOptions<SVGElementTagNameMap[K]>,
+  children?: NodeChild[],
 ) {
   const node = document.createElementNS('http://www.w3.org/2000/svg', tagName)
-  Object.assign(node, attrs)
+  applyAttrs(node, attrs, children)
   return createProxy(node, attrs)
+}
+
+function applyAttrs<E extends ParentNode>(
+  node: E,
+  attrs?: Partial<E>,
+  children?: NodeChild[],
+) {
+  if (!attrs) return
+  Object.assign(node, attrs)
+
+  if (!children) return
+  for (const child of children) {
+    appendChild(node, child)
+  }
 }
 
 export function appendChild(

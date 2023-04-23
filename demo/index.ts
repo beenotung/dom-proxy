@@ -16,18 +16,14 @@ import {
 console.log('ts')
 console.time('init')
 
-// get the native element from .node property
-// (only necessary when not wrapped by fragment helper function)
-let title = h1({ textContent: 'dom-proxy demo' }).node
-
-title.appendChild(
-  fragment([
+document.body.appendChild(
+  h1({}, [
+    'dom-proxy demo',
     a({ textContent: 'git', href: 'https://github.com/beenotung/dom-proxy' }),
     a({ textContent: 'npm', href: 'https://www.npmjs.com/package/dom-proxy' }),
-  ]),
+  ]).node, // get the native element from .node property
+  // (only necessary when not wrapped by fragment helper function)
 )
-
-document.body.appendChild(title)
 
 let upTimeText = text(0)
 
@@ -40,7 +36,11 @@ document.body.appendChild(
   fragment([h2({ textContent: 'up time' }), upTimeText, ' seconds']),
 )
 
-let nameInput = input({ listen: 'change', placeholder: 'guest' })
+let nameInput = input({
+  listen: 'change',
+  placeholder: 'guest',
+  id: 'visitor-name',
+})
 let nameText = text()
 let greetDotsText = text()
 
@@ -50,14 +50,15 @@ watch(() => {
   greetDotsText.textContent = '.'.repeat(n)
 })
 
-let greetMessage = p()
-greetMessage.appendChild(fragment(['hello, ', nameText, greetDotsText]))
 document.body.appendChild(
   fragment([
     h2({ textContent: 'change event demo' }),
-    fragment([label({ textContent: 'name: ' }), nameInput]),
+    fragment([
+      label({ textContent: 'name: ', htmlFor: nameInput.id }),
+      nameInput,
+    ]),
     br(),
-    greetMessage,
+    p({}, ['hello, ', nameText, greetDotsText]),
   ]),
 )
 

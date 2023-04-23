@@ -49,7 +49,7 @@ More examples can be found in [./demo/index.ts](demo/index.ts)
 ```typescript
 import { watch, input, span, label, fragment } from 'dom-proxy'
 
-let nameInput = input({ placeholder: 'guest' })
+let nameInput = input({ placeholder: 'guest', id: 'visitor-name' })
 let nameSpan = span()
 
 watch(() => {
@@ -57,15 +57,12 @@ watch(() => {
   nameSpan.textContent = nameInput.value || nameInput.placeholder
 })
 
-let greetMessage = p()
-greetMessage.appendChild(fragment(['hello, ', nameSpan]))
-
 document.body.appendChild(
   fragment([
     // use a DocumentFragment to contain the elements
-    label({ textContent: 'name: ' }),
+    label({ textContent: 'name: ', htmlFor: nameInput.id }),
     nameInput,
-    greetMessage,
+    p({}, ['hello, ', nameSpan]),
   ]),
 )
 ```
@@ -84,9 +81,7 @@ function watch(fn: Function): void
 ### Creation functions
 
 ```typescript
-function fragment(
-  nodes: Array<Node | ProxyNode | string | number>,
-): DocumentFragment
+function fragment(nodes: NodeChild[]): DocumentFragment
 
 /** @alias t, text */
 function createText(value?: string | number): ProxyNode<Text>
@@ -94,29 +89,39 @@ function createText(value?: string | number): ProxyNode<Text>
 /** @alias h, html */
 function createHTMLElement<K, Element>(
   tagName: K,
-  attrs?: Partial<Element & CreateProxyOptions>,
+  attrs?: Partial<Element> & CreateProxyOptions,
+  children?: NodeChild[],
 ): ProxyNode<Element>
 
 /** @alias s, svg */
 function createSVGElement<K, SVGElement>(
   tagName: K,
-  attrs?: Partial<SVGElement & CreateProxyOptions>,
+  attrs?: Partial<SVGElement> & CreateProxyOptions,
+  children?: NodeChild[],
 ): ProxyNode<SVGElement>
+
+function createProxy<E extends Node>(
+  node: E,
+  options?: CreateProxyOptions,
+): ProxyNode<E>
 ```
 
 ### Options Types / Output Types
 
 ```typescript
-type CreateProxyOptions = {
-  listen?: 'change' | 'input' | false
-}
-
 type ProxyNode<E> = E & {
   node: E
 }
 
+type NodeChild = Node | ProxyNode | string | number
+
+type CreateProxyOptions = {
+  listen?: 'change' | 'input' | false
+}
+
 type PartialCreateElement<E> = (
-  attrs?: Partial<E & CreateProxyOptions>,
+  attrs?: Partial<E> & CreateProxyOptions,
+  children?: NodeChild[],
 ) => ProxyNode<E>
 ```
 
