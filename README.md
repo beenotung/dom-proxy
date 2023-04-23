@@ -1,4 +1,4 @@
-# live-dom
+# dom-proxy
 
 Develop declarative UI with (opt-in) automatic dependecy tracking without VDOM nor compiler.
 
