@@ -46,7 +46,7 @@ let greetDotsText = text()
 
 watch(() => (nameText.textContent = nameInput.value || nameInput.placeholder))
 watch(() => {
-  let n = +upTimeText.textContent % 5
+  let n = +upTimeText.textContent! % 5
   greetDotsText.textContent = '.'.repeat(n)
 })
 
@@ -77,7 +77,7 @@ let cInput = input({
 })
 
 watch(() => {
-  bInput.value = upTimeText.textContent
+  bInput.value = upTimeText.textContent!
 })
 
 watch(() => {
