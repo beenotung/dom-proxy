@@ -41,10 +41,10 @@ export function createProxy<E extends Node>(
   options?: CreateProxyOptions,
 ): ProxyNode<E> {
   const deps = new Map<string, Set<() => void>>()
-  const listentEventType = options?.listen ?? 'input'
+  const listenEventType = options?.listen ?? 'input'
   const proxy = new Proxy(node, {
     get(target, p, receiver) {
-      if (listentEventType && watchFn && typeof p === 'string') {
+      if (listenEventType && watchFn && typeof p === 'string') {
         const key =
           p === 'value' || p === 'valueAsNumber' || p === 'valueAsDate'
             ? 'value'
@@ -52,7 +52,7 @@ export function createProxy<E extends Node>(
         const fn = watchFn
         if (key === 'value') {
           target.addEventListener(
-            listentEventType,
+            listenEventType,
             // wrap the function to avoid the default behavior be cancelled
             // if the inline-function returns false
             () => fn(),
