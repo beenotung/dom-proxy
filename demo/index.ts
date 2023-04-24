@@ -44,7 +44,9 @@ let nameInput = input({
 let nameText = text()
 let greetDotsText = text()
 
-watch(() => (nameText.textContent = nameInput.value || nameInput.placeholder))
+watch(() => {
+  nameText.textContent = nameInput.value || nameInput.placeholder
+})
 watch(() => {
   let n = +upTimeText.textContent! % 5
   greetDotsText.textContent = '.'.repeat(n)
