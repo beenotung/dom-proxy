@@ -3,6 +3,8 @@ import { genCreateHTMLElement } from './core'
 export const br = genCreateHTMLElement('br')
 export const p = genCreateHTMLElement('p')
 export const a = genCreateHTMLElement('a')
+export const div = genCreateHTMLElement('div')
+export const form = genCreateHTMLElement('form')
 export const input = genCreateHTMLElement('input')
 export const label = genCreateHTMLElement('label')
 export const span = genCreateHTMLElement('span')
