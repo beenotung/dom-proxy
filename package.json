@@ -41,6 +41,7 @@
     "esbuild": "esbuild --bundle browser.ts --outfile=browser.js"
   },
   "devDependencies": {
+    "@beenotung/tslib": "^20.4.0",
     "@types/node": "^18.14.5",
     "esbuild": "^0.17.10",
     "format-json-cli": "^1.0.1",
