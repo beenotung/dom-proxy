@@ -1,3 +1,4 @@
+import { code } from '../helpers'
 import {
   watch,
   text,
@@ -22,6 +23,14 @@ document.body.appendChild(
     a({ textContent: 'npm', href: 'https://www.npmjs.com/package/dom-proxy' }),
   ]).node, // get the native element from .node property
   // (only necessary when not wrapped by fragment helper function)
+)
+
+document.body.appendChild(
+  p({}, [
+    "This interactive page is created entirely in Typescript using dom-proxy's creation helper functions and auto-tracking ",
+    code({ textContent: 'watch()' }),
+    ' function.',
+  ]).node,
 )
 
 let upTimeText = text(0)
@@ -126,6 +135,8 @@ document.body.appendChild(
   fragment([
     h2({ textContent: 'more demo' }),
     a({ href: 'signup.html', textContent: 'signup.html' }),
+    ', ',
+    a({ href: 'hybrid.html', textContent: 'hybrid.html' }),
   ]),
 )
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hybrid Demo</title>
+    <style>
+      form label {
+        display: block;
+        margin-bottom: 1rem;
+        text-transform: capitalize;
+      }
+      form label input {
+        margin-top: 0.5rem;
+        display: block;
+      }
+      footer {
+        margin-top: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hybrid Demo</h1>
+    <p>
+      This page demo how to use dom-proxy with native dom elements (that are
+      already present in the DOM).
+    </p>
+    <h2>Demo Form</h2>
+    <form id="loginForm">
+      <label>
+        username:
+        <input name="username" type="text" />
+      </label>
+      <label>
+        password:
+        <input name="password" type="password" />
+      </label>
+      <p>preview: <span id="preview"></span></p>
+      <input type="submit" value="Submit" />
+      <input type="reset" value="Reset" />
+    </form>
+    <script src="hybrid.js"></script>
+    <footer>
+      <a href="index.html">back to home</a>
+    </footer>
+  </body>
+</html>
