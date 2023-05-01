@@ -30,8 +30,10 @@
     "demo"
   ],
   "scripts": {
-    "demo": "esbuild --bundle demo/index.ts --outfile=demo/index.js",
-    "dev": "npm run demo -- --watch",
+    "demo": "run-p demo:*",
+    "demo:index": "esbuild --bundle demo/index.ts --outfile=demo/index.js",
+    "demo:signup": "esbuild --bundle demo/signup.ts --outfile=demo/signup.js",
+    "dev": "npm run demo:index -- --watch",
     "upload": "npm run demo && surge demo https://dom-proxy.surge.sh",
     "format": "prettier --write . && format-json-cli",
     "test": "tsc --noEmit",
@@ -45,6 +47,7 @@
     "@types/node": "^18.14.5",
     "esbuild": "^0.17.10",
     "format-json-cli": "^1.0.1",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.8.7",
     "rimraf": "^5.0.0",
     "surge": "^0.23.1",

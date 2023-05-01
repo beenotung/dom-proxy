@@ -55,7 +55,7 @@ function submitForm(event: Event) {
     alert('please correct the fields before submitting')
     return
   }
-  alert('todo')
+  alert('valid to submit')
 }
 
 let signupForm = form({ onsubmit: submitForm }, [

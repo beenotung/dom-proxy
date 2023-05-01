@@ -7,7 +7,6 @@ import {
   button,
   a,
   p,
-  span,
   label,
   h1,
   h2,
@@ -120,6 +119,13 @@ document.body.appendChild(
     cText,
     br(),
     resetButton,
+  ]),
+)
+
+document.body.appendChild(
+  fragment([
+    h2({ textContent: 'more demo' }),
+    a({ href: 'signup.html', textContent: 'signup.html' }),
   ]),
 )
 
