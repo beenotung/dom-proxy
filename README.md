@@ -44,7 +44,7 @@ This example consists of a input and text message.
 
 With the `watch()` function, the text message is initialied and updated according to the input value. We don't need to specify the dependency explicitly.
 
-More examples can be found in [./demo/index.ts](demo/index.ts)
+More examples can be found in [./demo/index.ts](demo/index.ts) and [./demo/signup.ts](demo/signup.ts)
 
 ```typescript
 import { watch, input, span, label, fragment } from 'dom-proxy'
