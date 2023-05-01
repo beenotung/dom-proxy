@@ -159,7 +159,7 @@ const input: PartialCreateElement<HTMLInputElement>
 
 The complete list of create element helper functions:
 
-br, p, a, div, form, input, label, span, button, h1, h2, h3, h4, h5, h6, b, i, img, audio, video, ol, ul, li
+br, p, a, div, form, input, label, span, button, h1, h2, h3, h4, h5, h6, b, i, img, audio, video, ol, ul, li, code
 
 ## License
 
