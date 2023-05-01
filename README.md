@@ -148,25 +148,18 @@ The creation function of some commonly used elements are defined as partially ap
 If you need more helper functions, you can defined them with `genCreateHTMLElement(tagName)` or `genCreateSVGElement(tagName)`
 
 ```typescript
-const br: PartialCreateElement<HTMLBRElement>
+// some pre-defined helper functions
+const div: PartialCreateElement<HTMLDivElement>
 const p: PartialCreateElement<HTMLParagraphElement>
 const a: PartialCreateElement<HTMLAnchorElement>
-const input: PartialCreateElement<HTMLInputElement>
 const label: PartialCreateElement<HTMLLabelElement>
-const span: PartialCreateElement<HTMLSpanElement>
-const button: PartialCreateElement<HTMLButtonElement>
-const h1: PartialCreateElement<HTMLHeadingElement>
-const h2: PartialCreateElement<HTMLHeadingElement>
-const h3: PartialCreateElement<HTMLHeadingElement>
-const h4: PartialCreateElement<HTMLHeadingElement>
-const h5: PartialCreateElement<HTMLHeadingElement>
-const h6: PartialCreateElement<HTMLHeadingElement>
-const b: PartialCreateElement<HTMLElement>
-const i: PartialCreateElement<HTMLElement>
-const img: PartialCreateElement<HTMLImageElement>
-const audio: PartialCreateElement<HTMLAudioElement>
-const video: PartialCreateElement<HTMLVideoElement>
+const input: PartialCreateElement<HTMLInputElement>
+// and more ...
 ```
+
+The complete list of create element helper functions:
+
+br, p, a, div, form, input, label, span, button, h1, h2, h3, h4, h5, h6, b, i, img, audio, video
 
 ## License
 
