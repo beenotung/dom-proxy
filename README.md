@@ -141,14 +141,14 @@ function genCreateSVGElement<K extends keyof SVGElementTagNameMap>(
 ): PartialCreateElement<SVGElementTagNameMap[K]>
 ```
 
-### Helper functions
+### Creation helper functions
 
 The creation function of some commonly used elements are defined as partially applied createHTMLElement.
 
 If you need more helper functions, you can defined them with `genCreateHTMLElement(tagName)` or `genCreateSVGElement(tagName)`
 
 ```typescript
-// some pre-defined helper functions
+// some pre-defined creation helper functions
 const div: PartialCreateElement<HTMLDivElement>
 const p: PartialCreateElement<HTMLParagraphElement>
 const a: PartialCreateElement<HTMLAnchorElement>
@@ -159,7 +159,7 @@ const input: PartialCreateElement<HTMLInputElement>
 
 The complete list of create element helper functions:
 
-br, p, a, div, form, input, label, span, button, h1, h2, h3, h4, h5, h6, b, i, img, audio, video
+br, p, a, div, form, input, label, span, button, h1, h2, h3, h4, h5, h6, b, i, img, audio, video, ol, ul, li
 
 ## License
 
