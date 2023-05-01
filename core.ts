@@ -36,6 +36,20 @@ export type CreateProxyOptions = {
 
 export type ProxyNode<E> = E & { node: E }
 
+let resetTimer: ReturnType<typeof setTimeout> | null = null
+const resetFns = new Set<() => void>()
+function resetTimeout() {
+  for (let fn of resetFns) {
+    try {
+      fn()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  resetFns.clear()
+  resetTimer = null
+}
+
 export function createProxy<E extends Node>(
   node: E,
   options?: CreateProxyOptions,
@@ -56,6 +70,14 @@ export function createProxy<E extends Node>(
             // wrap the function to avoid the default behavior be cancelled
             // if the inline-function returns false
             () => fn(),
+          )
+          ;(target as Node as HTMLInputElement).form?.addEventListener(
+            'reset',
+            () => {
+              resetFns.add(fn)
+              if (resetTimer) return
+              resetTimer = setTimeout(resetTimeout)
+            },
           )
         }
         let fns = deps.get(key)

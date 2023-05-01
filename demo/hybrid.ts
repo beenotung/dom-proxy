@@ -27,7 +27,7 @@ watch(() => {
   submit.disabled = !username.value || !password.value
 })
 
-loginForm.addEventListener('reset', () => {
-  username.value = ''
-  password.value = ''
+loginForm.addEventListener('submit', event => {
+  event.preventDefault()
+  alert('mock form submission')
 })
