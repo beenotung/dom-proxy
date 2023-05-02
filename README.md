@@ -71,6 +71,10 @@ document.body.appendChild(
 
 ### Example using selector functions
 
+This example query and proxy the existing elements from the DOM, then setup interactive logics in the `watch()` function.
+
+If the selectors don't match any element, it will throw error.
+
 ```typescript
 import { ProxyNode, watch } from 'dom-proxy'
 import { queryElement, queryElementProxies } from 'dom-proxy'

@@ -1,6 +1,7 @@
 import { ProxyNode, watch } from '../core'
 import { queryElement, queryElementProxies } from '../selector'
 
+// it will throw error if the selector doesn't match any elements.
 let loginForm = queryElement<HTMLFormElement>('#loginForm')
 let elements = queryElementProxies(
   {
