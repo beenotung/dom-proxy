@@ -1,5 +1,6 @@
 import { createProxy, ProxyNode } from './core'
 
+/** @throws Error if the selector doesn't match any element */
 export function queryElement<E extends Element>(
   selector: string,
   parent: ParentNode = document.body,
@@ -9,6 +10,7 @@ export function queryElement<E extends Element>(
   return element
 }
 
+/** @throws Error if the selector doesn't match any element */
 export function queryElementProxy<E extends Element>(
   selector: string,
   parent?: ParentNode,
@@ -16,6 +18,7 @@ export function queryElementProxy<E extends Element>(
   return createProxy(queryElement<E>(selector, parent))
 }
 
+/** @throws Error if any selectors don't match any elements */
 export function queryElements<K extends string, E extends Element>(
   selectors: Record<K, string>,
   parent: ParentNode = document.body,
@@ -27,6 +30,7 @@ export function queryElements<K extends string, E extends Element>(
   return object
 }
 
+/** @throws Error if any selectors don't match any elements */
 export function queryElementProxies<K extends string, E extends Element>(
   selectors: Record<K, string>,
   parent: ParentNode = document.body,
