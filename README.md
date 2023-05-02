@@ -40,11 +40,13 @@ You can also get dom-proxy via CDN:
 
 ## Usage Example
 
+More examples can be found in [./demo/index.ts](demo/index.ts), [./demo/signup.ts](demo/signup.ts), and [./demo/hybrid.html](./demo/hybrid.html) + [./demo/hybrid.ts](./demo/hybrid.ts)
+
+### Example using creation functions
+
 This example consists of a input and text message.
 
 With the `watch()` function, the text message is initialied and updated according to the input value. We don't need to specify the dependency explicitly.
-
-More examples can be found in [./demo/index.ts](demo/index.ts), [./demo/signup.ts](demo/signup.ts), and [./demo/hybrid.html](./demo/hybrid.html) + [./demo/hybrid.ts](./demo/hybrid.ts)
 
 ```typescript
 import { watch, input, span, label, fragment } from 'dom-proxy'
@@ -65,6 +67,39 @@ document.body.appendChild(
     p({}, ['hello, ', nameSpan]),
   ]),
 )
+```
+
+### Example using selector functions
+
+```typescript
+import { ProxyNode, watch } from 'dom-proxy'
+import { queryElement, queryElementProxies } from 'dom-proxy'
+
+let loginForm = queryElement<HTMLFormElement>('#loginForm')
+let elements = queryElementProxies(
+  {
+    username: '[name=username]',
+    password: '[name=password]',
+    preview: '#preview',
+    reset: '[type=reset]',
+    submit: '[type=submit]',
+  },
+  loginForm,
+)
+const preview = elements.preview
+const username = elements.username as ProxyNode<HTMLInputElement>
+const password = elements.password as ProxyNode<HTMLInputElement>
+const reset = elements.reset as ProxyNode<HTMLInputElement>
+const submit = elements.submit as ProxyNode<HTMLInputElement>
+
+watch(() => {
+  preview.textContent = username.value + ':' + password.value
+})
+
+watch(() => {
+  reset.disabled = !username.value && !password.value
+  submit.disabled = !username.value || !password.value
+})
 ```
 
 ## Typescript Signature
