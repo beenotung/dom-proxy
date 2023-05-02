@@ -78,6 +78,29 @@ The types shown in this section are simplified, see the `.d.ts` files published 
 function watch(fn: Function): void
 ```
 
+### Selector functions
+
+These query selector functions will throw error if no elements match the selectors.
+
+```typescript
+function queryElement<Element>(selector: string, parent?: ParentNode): Element
+
+function queryElementProxy<Element>(
+  selector: string,
+  parent?: ParentNode,
+): ProxyNode<Element>
+
+function queryElements<K, Element>(
+  selectors: Record<K, string>,
+  parent?: ParentNode,
+): Record<K, Element>
+
+function queryElementProxies<K, Element>(
+  selectors: Record<K, string>,
+  parent?: ParentNode,
+): Record<K, ProxyNode<Element>>
+```
+
 ### Creation functions
 
 ```typescript
@@ -100,10 +123,10 @@ function createSVGElement<K, SVGElement>(
   children?: NodeChild[],
 ): ProxyNode<SVGElement>
 
-function createProxy<E extends Node>(
-  node: E,
+function createProxy<Node>(
+  node: Node,
   options?: CreateProxyOptions,
-): ProxyNode<E>
+): ProxyNode<Node>
 ```
 
 ### Options Types / Output Types
