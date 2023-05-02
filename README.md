@@ -40,7 +40,11 @@ You can also get dom-proxy via CDN:
 
 ## Usage Example
 
-More examples can be found in [./demo/index.ts](demo/index.ts), [./demo/signup.ts](demo/signup.ts), and [./demo/hybrid.html](./demo/hybrid.html) + [./demo/hybrid.ts](./demo/hybrid.ts)
+More examples can be found in [./demo](./demo):
+
+- [index.ts](./demo/index.ts)
+- [signup.ts](./demo/signup.ts)
+- [hybrid.html](./demo/hybrid.html) + [hybrid.ts](./demo/hybrid.ts)
 
 ### Example using creation functions
 
