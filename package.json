@@ -38,7 +38,7 @@
     "upload": "npm run demo && surge demo https://dom-proxy.surge.sh",
     "format": "prettier --write . && format-json-cli",
     "test": "tsc --noEmit",
-    "clean": "rimraf *.js *.d.ts *.tsbuildinfo demo/index.js",
+    "clean": "rimraf *.js *.d.ts *.tsbuildinfo demo/*.js",
     "build": "npm run tsc && npm run esbuild",
     "tsc": "npm run clean && tsc -p .",
     "esbuild": "esbuild --bundle browser.ts --outfile=browser.js"
