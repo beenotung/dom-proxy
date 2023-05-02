@@ -1,7 +1,7 @@
 import { ProxyNode, watch } from '../core'
-import { queryElementProxies, queryElementProxy } from '../selector'
+import { queryElement, queryElementProxies } from '../selector'
 
-let loginForm = queryElementProxy<HTMLFormElement>('#loginForm')
+let loginForm = queryElement<HTMLFormElement>('#loginForm')
 let elements = queryElementProxies(
   {
     username: '[name=username]',
