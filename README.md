@@ -155,14 +155,14 @@ function createText(value?: string | number): ProxyNode<Text>
 /** @alias h, html */
 function createHTMLElement<K, Element>(
   tagName: K,
-  attrs?: Properties<Element> & CreateProxyOptions,
+  props?: Properties<Element> & CreateProxyOptions,
   children?: NodeChild[],
 ): ProxyNode<Element>
 
 /** @alias s, svg */
 function createSVGElement<K, SVGElement>(
   tagName: K,
-  attrs?: Properties<SVGElement> & CreateProxyOptions,
+  props?: Properties<SVGElement> & CreateProxyOptions,
   children?: NodeChild[],
 ): ProxyNode<SVGElement>
 
@@ -190,7 +190,7 @@ type Properties<E> = Partial<{
 }>
 
 type PartialCreateElement<Element> = (
-  attrs?: Properties<Element> & CreateProxyOptions,
+  props?: Properties<Element> & CreateProxyOptions,
   children?: NodeChild[],
 ) => ProxyNode<Element>
 ```

@@ -119,7 +119,7 @@ export type CreateElementOptions<E extends Node> = Properties<E> &
   CreateProxyOptions
 
 export type PartialCreateElement<E extends Node> = (
-  attrs?: CreateElementOptions<E>,
+  props?: CreateElementOptions<E>,
   children?: NodeChild[],
 ) => ProxyNode<E>
 
@@ -127,46 +127,46 @@ export type PartialCreateElement<E extends Node> = (
 export function genCreateHTMLElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
 ): PartialCreateElement<HTMLElementTagNameMap[K]> {
-  return (attrs, children) => createHTMLElement(tagName, attrs, children)
+  return (props, children) => createHTMLElement(tagName, props, children)
 }
 
 /** @description higher-function, partially applied createSVGElement */
 export function genCreateSVGElement<K extends keyof SVGElementTagNameMap>(
   tagName: K,
 ): PartialCreateElement<SVGElementTagNameMap[K]> {
-  return (attrs, children) => createSVGElement(tagName, attrs, children)
+  return (props, children) => createSVGElement(tagName, props, children)
 }
 
 /** @alias h, html */
 export function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
-  attrs?: CreateElementOptions<HTMLElementTagNameMap[K]>,
+  props?: CreateElementOptions<HTMLElementTagNameMap[K]>,
   children?: NodeChild[],
 ) {
   const node = document.createElement<K>(tagName)
-  applyAttrs(node, attrs, children)
-  return createProxy(node, attrs)
+  applyAttrs(node, props, children)
+  return createProxy(node, props)
 }
 
 /** @alias s, svg */
 export function createSVGElement<K extends keyof SVGElementTagNameMap>(
   tagName: K,
-  attrs?: CreateElementOptions<SVGElementTagNameMap[K]>,
+  props?: CreateElementOptions<SVGElementTagNameMap[K]>,
   children?: NodeChild[],
 ) {
   const node = document.createElementNS('http://www.w3.org/2000/svg', tagName)
-  applyAttrs(node, attrs, children)
-  return createProxy(node, attrs)
+  applyAttrs(node, props, children)
+  return createProxy(node, props)
 }
 
 function applyAttrs<E extends ParentNode>(
   node: E,
-  attrs?: Properties<E>,
+  props?: Properties<E>,
   children?: NodeChild[],
 ) {
-  if (attrs) {
-    for (let p in attrs) {
-      let value = attrs[p]
+  if (props) {
+    for (let p in props) {
+      let value = props[p]
       if (value !== null && typeof value === 'object' && p in node) {
         Object.assign((node as any)[p], value)
       } else {
