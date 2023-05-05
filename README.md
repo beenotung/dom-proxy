@@ -155,14 +155,14 @@ function createText(value?: string | number): ProxyNode<Text>
 /** @alias h, html */
 function createHTMLElement<K, Element>(
   tagName: K,
-  attrs?: Partial<Element> & CreateProxyOptions,
+  attrs?: Properties<Element> & CreateProxyOptions,
   children?: NodeChild[],
 ): ProxyNode<Element>
 
 /** @alias s, svg */
 function createSVGElement<K, SVGElement>(
   tagName: K,
-  attrs?: Partial<SVGElement> & CreateProxyOptions,
+  attrs?: Properties<SVGElement> & CreateProxyOptions,
   children?: NodeChild[],
 ): ProxyNode<SVGElement>
 
@@ -185,10 +185,14 @@ type CreateProxyOptions = {
   listen?: 'change' | 'input' | false
 }
 
-type PartialCreateElement<E> = (
-  attrs?: Partial<E> & CreateProxyOptions,
+type Properties<E> = Partial<{
+  [P in keyof E]?: E[P] extends object ? Partial<E[P]> : E[P]
+}>
+
+type PartialCreateElement<Element> = (
+  attrs?: Properties<Element> & CreateProxyOptions,
   children?: NodeChild[],
-) => ProxyNode<E>
+) => ProxyNode<Element>
 ```
 
 ### Partially applied creation functions

@@ -111,9 +111,14 @@ export function createProxy<E extends Node>(
 
 export type NodeChild = Node | { node: Node } | string | number
 
-export type CreateElementOptions<E> = Partial<E> & CreateProxyOptions
+export type Properties<E extends Node> = Partial<{
+  [P in keyof E]?: E[P] extends object ? Partial<E[P]> : E[P]
+}>
 
-export type PartialCreateElement<E> = (
+export type CreateElementOptions<E extends Node> = Properties<E> &
+  CreateProxyOptions
+
+export type PartialCreateElement<E extends Node> = (
   attrs?: CreateElementOptions<E>,
   children?: NodeChild[],
 ) => ProxyNode<E>
@@ -156,15 +161,24 @@ export function createSVGElement<K extends keyof SVGElementTagNameMap>(
 
 function applyAttrs<E extends ParentNode>(
   node: E,
-  attrs?: Partial<E>,
+  attrs?: Properties<E>,
   children?: NodeChild[],
 ) {
-  if (!attrs) return
-  Object.assign(node, attrs)
+  if (attrs) {
+    for (let p in attrs) {
+      let value = attrs[p]
+      if (value !== null && typeof value === 'object' && p in node) {
+        Object.assign((node as any)[p], value)
+      } else {
+        ;(node as any)[p] = value
+      }
+    }
+  }
 
-  if (!children) return
-  for (const child of children) {
-    appendChild(node, child)
+  if (children) {
+    for (const child of children) {
+      appendChild(node, child)
+    }
   }
 }
 
