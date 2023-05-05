@@ -137,6 +137,8 @@ document.body.appendChild(
     a({ href: 'signup.html', textContent: 'signup.html' }),
     ', ',
     a({ href: 'hybrid.html', textContent: 'hybrid.html' }),
+    ', ',
+    a({ href: 'style.html', textContent: 'style.html' }),
   ]),
 )
 
