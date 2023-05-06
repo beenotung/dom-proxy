@@ -1,17 +1,5 @@
-import { code } from '../helpers'
-import {
-  watch,
-  text,
-  fragment,
-  input,
-  br,
-  button,
-  a,
-  p,
-  label,
-  h1,
-  h2,
-} from '..'
+import { text, fragment, watch } from '../core'
+import { h1, a, p, code, h2, input, label, br, button } from '../helpers'
 
 console.log('ts')
 console.time('init')
