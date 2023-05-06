@@ -45,6 +45,7 @@ More examples can be found in [./demo](./demo):
 - [index.ts](./demo/index.ts)
 - [signup.ts](./demo/signup.ts)
 - [hybrid.html](./demo/hybrid.html) + [hybrid.ts](./demo/hybrid.ts)
+- [style.html](./demo/style.html) + [style.ts](./demo/style.ts)
 
 ### Example using creation functions
 
