@@ -173,6 +173,42 @@ function createProxy<Node>(
 ): ProxyNode<Node>
 ```
 
+### Creation helper functions
+
+The creation function of some commonly used elements are defined as partially applied createHTMLElement.
+
+If you need more helper functions, you can defined them with `genCreateHTMLElement(tagName)` or `genCreateSVGElement(tagName)`
+
+```typescript
+// some pre-defined creation helper functions
+const div: PartialCreateElement<HTMLDivElement>
+const p: PartialCreateElement<HTMLParagraphElement>
+const a: PartialCreateElement<HTMLAnchorElement>
+const label: PartialCreateElement<HTMLLabelElement>
+const input: PartialCreateElement<HTMLInputElement>
+// and more ...
+```
+
+The complete list of create element helper functions:
+
+**br, p, a, div, form, input, label, span, button, h1, h2, h3, h4, h5, h6, b, i, img, audio, video, ol, ul, li, code**
+
+### Partially applied creation functions
+
+These are some high-order functions that helps to generate type-safe creation functions for specific elements with statically typed properties.
+
+```typescript
+/** partially applied createHTMLElement */
+function genCreateHTMLElement<K extends keyof HTMLElementTagNameMap>(
+  tagName: K,
+): PartialCreateElement<HTMLElementTagNameMap[K]>
+
+/** partially applied createSVGElement */
+function genCreateSVGElement<K extends keyof SVGElementTagNameMap>(
+  tagName: K,
+): PartialCreateElement<SVGElementTagNameMap[K]>
+```
+
 ### Options Types / Output Types
 
 ```typescript
@@ -195,42 +231,6 @@ type PartialCreateElement<Element> = (
   children?: NodeChild[],
 ) => ProxyNode<Element>
 ```
-
-### Partially applied creation functions
-
-These are some high-order functions that helps to generate type-safe creation functions for specific elements with statically typed properties.
-
-```typescript
-/** partially applied createHTMLElement */
-function genCreateHTMLElement<K extends keyof HTMLElementTagNameMap>(
-  tagName: K,
-): PartialCreateElement<HTMLElementTagNameMap[K]>
-
-/** partially applied createSVGElement */
-function genCreateSVGElement<K extends keyof SVGElementTagNameMap>(
-  tagName: K,
-): PartialCreateElement<SVGElementTagNameMap[K]>
-```
-
-### Creation helper functions
-
-The creation function of some commonly used elements are defined as partially applied createHTMLElement.
-
-If you need more helper functions, you can defined them with `genCreateHTMLElement(tagName)` or `genCreateSVGElement(tagName)`
-
-```typescript
-// some pre-defined creation helper functions
-const div: PartialCreateElement<HTMLDivElement>
-const p: PartialCreateElement<HTMLParagraphElement>
-const a: PartialCreateElement<HTMLAnchorElement>
-const label: PartialCreateElement<HTMLLabelElement>
-const input: PartialCreateElement<HTMLInputElement>
-// and more ...
-```
-
-The complete list of create element helper functions:
-
-br, p, a, div, form, input, label, span, button, h1, h2, h3, h4, h5, h6, b, i, img, audio, video, ol, ul, li, code
 
 ## License
 
