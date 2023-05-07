@@ -51,11 +51,8 @@ watch(() => {
 document.body.appendChild(
   fragment([
     h2({ textContent: 'change event demo' }),
-    fragment([
-      label({ textContent: 'name: ', htmlFor: nameInput.id }),
-      nameInput,
-    ]),
-    br(),
+    label({ textContent: 'name: ', htmlFor: nameInput.id }),
+    nameInput,
     p({}, ['hello, ', nameText, greetDotsText]),
   ]),
 )
