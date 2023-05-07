@@ -40,6 +40,7 @@ let nameInput = input({
 let nameText = text()
 let greetDotsText = text()
 
+// the read-dependencies are tracked automatically
 watch(() => {
   nameText.textContent = nameInput.value || nameInput.placeholder
 })
@@ -49,6 +50,7 @@ watch(() => {
 })
 
 document.body.appendChild(
+  // use a DocumentFragment to contain the elements
   fragment([
     h2({ textContent: 'change event demo' }),
     label({ textContent: 'name: ', htmlFor: nameInput.id }),
