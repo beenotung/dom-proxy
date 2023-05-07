@@ -1,6 +1,6 @@
 {
   "name": "dom-proxy",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "Develop declarative UI with (opt-in) automatic dependecy tracking without boilerplate code, VDOM, nor compiler.",
   "keywords": [
     "DOM",
