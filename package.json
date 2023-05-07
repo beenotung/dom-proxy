@@ -31,11 +31,12 @@
   ],
   "scripts": {
     "demo": "run-p demo:*",
+    "demo:quick-example": "esbuild --bundle demo/quick-example.ts --outfile=demo/quick-example.js",
     "demo:index": "esbuild --bundle demo/index.ts --outfile=demo/index.js",
     "demo:signup": "esbuild --bundle demo/signup.ts --outfile=demo/signup.js",
     "demo:hybrid": "esbuild --bundle demo/hybrid.ts --outfile=demo/hybrid.js",
     "demo:style": "esbuild --bundle demo/style.ts --outfile=demo/style.js",
-    "dev": "npm run demo:style -- --watch",
+    "dev": "npm run demo:quick-example -- --watch",
     "upload": "npm run demo && surge demo https://dom-proxy.surge.sh",
     "format": "prettier --write . && format-json-cli",
     "test": "tsc --noEmit",

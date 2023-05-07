@@ -1,12 +1,38 @@
 # dom-proxy
 
-Develop declarative UI with (opt-in) automatic dependecy tracking without boilerplate code, VDOM, nor compiler.
+Develop lightweight and declarative UI with automatic dependecy tracking without boilerplate code, VDOM, nor compiler.
 
 [![npm Package Version](https://img.shields.io/npm/v/dom-proxy)](https://www.npmjs.com/package/dom-proxy)
 [![Minified Package Size](https://img.shields.io/bundlephobia/min/dom-proxy)](https://bundlephobia.com/package/dom-proxy)
 [![Minified and Gzipped Package Size](https://img.shields.io/bundlephobia/minzip/dom-proxy)](https://bundlephobia.com/package/dom-proxy)
 
 Demo: https://dom-proxy.surge.sh
+
+## Quick Example
+
+```typescript
+import { watch, input, text, fragment, label, p } from 'dom-proxy'
+
+let nameInput = input({ placeholder: 'guest', id: 'visitor-name' })
+let nameText = text()
+
+// auto re-run when the value in changed
+watch(() => {
+  nameText.textContent = nameInput.value || nameInput.placeholder
+})
+
+document.body.appendChild(
+  fragment([
+    label({ textContent: 'name: ', htmlFor: nameInput.id }),
+    nameInput,
+    p({}, ['hello, ', nameText]),
+  ]),
+)
+```
+
+Complete example see [quick-example.ts](./demo/quick-example.ts)
+
+(Explained in the [usage examples](#usage-examples) section)
 
 ## Installation
 
@@ -23,13 +49,13 @@ import { watch } from 'dom-proxy'
 import * as domProxy from 'dom-proxy'
 ```
 
-Or import from javascript:
+Or import from javascript as commonjs module:
 
 ```javascript
 var domProxy = require('dom-proxy')
 ```
 
-You can also get dom-proxy via CDN:
+You can also get dom-proxy directly in html via CDN:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/dom-proxy@1/browser.min.js"></script>
@@ -38,7 +64,7 @@ You can also get dom-proxy via CDN:
 </script>
 ```
 
-## Usage Example
+## Usage Examples
 
 More examples can be found in [./demo](./demo):
 
@@ -59,14 +85,14 @@ import { watch, input, span, label, fragment } from 'dom-proxy'
 let nameInput = input({ placeholder: 'guest', id: 'visitor-name' })
 let nameSpan = span()
 
+// the read-dependencies are tracked automatically
 watch(() => {
-  // the read-dependencies are tracked automatically
   nameSpan.textContent = nameInput.value || nameInput.placeholder
 })
 
 document.body.appendChild(
+  // use a DocumentFragment to contain the elements
   fragment([
-    // use a DocumentFragment to contain the elements
     label({ textContent: 'name: ', htmlFor: nameInput.id }),
     nameInput,
     p({}, ['hello, ', nameSpan]),
@@ -175,23 +201,108 @@ function createProxy<Node>(
 
 ### Creation helper functions
 
-The creation function of some commonly used elements are defined as partially applied createHTMLElement.
+The creation function of most html elements and svg elements are defined as partially applied `createHTMLElement()` or `createSVGElement()`.
 
-If you need more helper functions, you can defined them with `genCreateHTMLElement(tagName)` or `genCreateSVGElement(tagName)`
+If you need more helper functions (e.g. for custom web components or deprecated elements[1]), you can defined them with `genCreateHTMLElement(tagName)` or `genCreateSVGElement(tagName)`
+
+The type of creation functions are inferred from the tag name with `HTMLElementTagNameMap` and `SVGElementTagNameMap`.
+
+Below are some example types:
 
 ```typescript
 // some pre-defined creation helper functions
-const div: PartialCreateElement<HTMLDivElement>
-const p: PartialCreateElement<HTMLParagraphElement>
-const a: PartialCreateElement<HTMLAnchorElement>
-const label: PartialCreateElement<HTMLLabelElement>
-const input: PartialCreateElement<HTMLInputElement>
+const div: PartialCreateElement<HTMLDivElement>,
+  p: PartialCreateElement<HTMLParagraphElement>,
+  a: PartialCreateElement<HTMLAnchorElement>,
+  label: PartialCreateElement<HTMLLabelElement>,
+  input: PartialCreateElement<HTMLInputElement>,
+  path: PartialCreateElement<SVGPathElement>,
+  polyline: PartialCreateElement<SVGPolylineElement>,
+  rect: PartialCreateElement<SVGRectElement>
 // and more ...
 ```
 
-The complete list of create element helper functions:
+For most elements, the creation functions use the same name as the tag name, however some are renamed to avoid name clash.
 
-**br, p, a, div, form, input, label, span, button, h1, h2, h3, h4, h5, h6, b, i, img, audio, video, ol, ul, li, code**
+Renamed html element creation functions:
+
+- `html` -> `htmlElement`
+- `s` -> `sElement`
+- `script` -> `scriptElement`
+- `style` -> `styleElement`
+- `title` -> `titleElement`
+- `var` -> `varElement`
+
+Renamed svg elements creation functions:
+
+- `a` -> `aSVG`
+- `script` -> `scriptSVG`
+- `style` -> `styleSVG`
+- `svg` -> `svgSVG`
+- `switch` -> `switchSVG`
+- `text` -> `textSVG`
+- `title` -> `titleSVG`
+
+<details>
+<summary>
+Tips to rename the creation functions (click to expand)
+</summary>
+
+The creation functions are defined dynamically in the proxy object `createHTMLElementFunctions` and `createSVGElementFunctions`
+
+If you prefer to rename them with different naming conventions, you can destruct from the proxy object using your preferred name. For example:
+
+```typescript
+const { s, style, var_ } = createHTMLElementFunctions
+const { a, text } = createSVGElementFunctions
+const {
+  html: { a: html_a, style: htmlStyle },
+  svg: { a: svg_a, style: svgStyle },
+} = createElementFunctions
+```
+
+You can also use them without renaming, e.g.:
+
+```typescript
+const h = createHTMLElementFunctions
+
+let style = document.body.appendChild(
+  fragment([
+    // you can use the creation functions without extracting into top-level const
+    h.s({ textContent: 'Now on sales' }),
+    'Sold out',
+  ]),
+)
+```
+
+The types of the proxies are listed below:
+
+```typescript
+type CreateHTMLElementFunctions = {
+  [K in keyof HTMLElementTagNameMap]: PartialCreateElement<
+    HTMLElementTagNameMap[K]
+  >
+}
+const createHTMLElementFunctions: CreateHTMLElementFunctions
+
+type CreateSVGElementFunctions = {
+  [K in keyof SVGElementTagNameMap]: PartialCreateElement<
+    SVGElementTagNameMap[K]
+  >
+}
+const createSVGElementFunctions: CreateSVGElementFunctions
+
+const createElementFunctions: {
+  html: CreateHTMLElementFunctions
+  svg: CreateSVGElementFunctions
+}
+```
+
+</details>
+
+<br>
+
+[1]: Some elements are deprecated in html5, e.g. dir, font, frame, frameset, marquee, param. They are not predefined to avoid tsc error in case their type definition are not included.
 
 ### Partially applied creation functions
 
