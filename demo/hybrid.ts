@@ -1,23 +1,24 @@
-import { ProxyNode, watch } from '../core'
+import { watch } from '../core'
 import { queryElement, queryElementProxies } from '../selector'
 
 // it will throw error if the selector doesn't match any elements.
-let loginForm = queryElement<HTMLFormElement>('#loginForm')
-let elements = queryElementProxies(
+let loginForm = queryElement('form#loginForm') // infer to be HTMLFormElement
+let {
+  username, // infer to be ProxyNode<HTMLInputElement>
+  password,
+  preview, // infer to be ProxyNode<Element>
+  reset,
+  submit,
+} = queryElementProxies(
   {
-    username: '[name=username]',
-    password: '[name=password]',
+    username: 'input[name=username]',
+    password: 'input[name=password]',
     preview: '#preview',
-    reset: '[type=reset]',
-    submit: '[type=submit]',
+    reset: 'input[type=reset]',
+    submit: 'input[type=submit]',
   },
   loginForm,
 )
-const preview = elements.preview
-const username = elements.username as ProxyNode<HTMLInputElement>
-const password = elements.password as ProxyNode<HTMLInputElement>
-const reset = elements.reset as ProxyNode<HTMLInputElement>
-const submit = elements.submit as ProxyNode<HTMLInputElement>
 
 watch(() => {
   preview.textContent = username.value + ':' + password.value
