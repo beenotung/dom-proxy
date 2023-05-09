@@ -66,7 +66,7 @@ var domProxy = require('dom-proxy')
 You can also get dom-proxy directly in html via CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/dom-proxy@1/browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dom-proxy@2/browser.min.js"></script>
 <script>
   console.log(typeof domProxy.watch) // function
 </script>
