@@ -22,12 +22,13 @@ export function queryElementProxy<Selector extends string>(
 export function queryElements<
   SelectorDict extends Dict<Selector>,
   Selector extends string,
->(selectors: SelectorDict, parent: ParentNode = document.body) {
-  let object = {} as {
-    [P in keyof SelectorDict]: SelectorElement<SelectorDict[P]>
-  }
+>(
+  selectors: SelectorDict,
+  parent: ParentNode = document.body,
+): { [P in keyof SelectorDict]: SelectorElement<SelectorDict[P]> } {
+  let object: any = {}
   for (let [key, selector] of Object.entries(selectors)) {
-    ;(object as any)[key] = queryElement(selector, parent)
+    object[key] = queryElement(selector, parent)
   }
   return object
 }
@@ -36,26 +37,32 @@ export function queryElements<
 export function queryElementProxies<
   SelectorDict extends Dict<Selector>,
   Selector extends string,
->(selectors: SelectorDict, parent: ParentNode = document.body) {
-  let object = {} as {
-    [P in keyof SelectorDict]: ProxyNode<SelectorElement<SelectorDict[P]>>
-  }
+>(
+  selectors: SelectorDict,
+  parent: ParentNode = document.body,
+): { [P in keyof SelectorDict]: ProxyNode<SelectorElement<SelectorDict[P]>> } {
+  let object: any = {}
   for (let [key, selector] of Object.entries(selectors)) {
-    ;(object as any)[key] = queryElementProxy(selector, parent)
+    object[key] = queryElementProxy(selector, parent)
   }
   return object
 }
 
-export type SelectorElement<Selector extends string> =
+type SelectorElement<Selector extends string> =
   GetTagName<Selector> extends `${infer TagName}`
     ? TagName extends keyof HTMLElementTagNameMap
       ? HTMLElementTagNameMap[TagName]
       : TagName extends keyof SVGElementTagNameMap
       ? SVGElementTagNameMap[TagName]
-      : Element
+      : FallbackSelectorElement<Selector>
+    : FallbackSelectorElement<Selector>
+
+type FallbackSelectorElement<Selector extends string> =
+  Selector extends `${string}[name=${string}]${string}`
+    ? HTMLInputElement
     : Element
 
-export type Dict<T> = {
+type Dict<T> = {
   [key: string]: T
 }
 

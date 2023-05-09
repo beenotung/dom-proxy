@@ -2,18 +2,12 @@ import { watch } from '../core'
 import { queryElement, queryElementProxies } from '../selector'
 
 // it will throw error if the selector doesn't match any elements.
-let loginForm = queryElement('form#loginForm') // infer to be HTMLFormElement
-let {
-  username, // infer to be ProxyNode<HTMLInputElement>
-  password,
-  preview, // infer to be ProxyNode<Element>
-  reset,
-  submit,
-} = queryElementProxies(
+let loginForm = queryElement('form#loginForm') // infer to be HTMLFormElement <- "form" tag name
+let { username, password, showPw, reset, submit } = queryElementProxies(
   {
-    username: 'input[name=username]',
-    password: 'input[name=password]',
-    preview: '#preview',
+    username: 'input[name=username]', // infer to be ProxyNode<HTMLInputElement> <- "input" tagName
+    password: '[name=password]', // fallback to be ProxyNode<HTMLInputElement> <- "[name=.*]" attribute
+    showPw: 'input#show-pw[type=checkbox]',
     reset: 'input[type=reset]',
     submit: 'input[type=submit]',
   },
@@ -21,7 +15,7 @@ let {
 )
 
 watch(() => {
-  preview.textContent = username.value + ':' + password.value
+  password.type = showPw.checked ? 'text' : 'password'
 })
 
 watch(() => {

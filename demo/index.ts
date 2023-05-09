@@ -33,7 +33,6 @@ document.body.appendChild(
 )
 
 let nameInput = input({
-  listen: 'change',
   placeholder: 'guest',
   id: 'visitor-name',
 })
@@ -41,9 +40,12 @@ let nameText = text()
 let greetDotsText = text()
 
 // the read-dependencies are tracked automatically
-watch(() => {
-  nameText.textContent = nameInput.value || nameInput.placeholder
-})
+watch(
+  () => {
+    nameText.textContent = nameInput.value || nameInput.placeholder
+  },
+  { listen: 'change' },
+)
 watch(() => {
   let n = +upTimeText.textContent! % 5
   greetDotsText.textContent = '.'.repeat(n)

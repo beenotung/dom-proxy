@@ -21,17 +21,20 @@ export function createText(value: string | number = '') {
   return createProxy(node)
 }
 
-let watchFn: (() => void) | null = null
-
-/** @description run once immediately, auto track dependency and re-run */
-export function watch(fn: () => void) {
-  watchFn = fn
-  fn()
-  watchFn = null
+export type WatchOptions = {
+  listen?: 'change' | 'input' | false // default 'input'
 }
 
-export type CreateProxyOptions = {
-  listen?: 'change' | 'input' | false // default 'input'
+let watchFn: (() => void) | undefined
+let watchOptions: WatchOptions | undefined
+
+/** @description run once immediately, auto track dependency and re-run */
+export function watch(fn: () => void, options?: WatchOptions) {
+  watchFn = fn
+  watchOptions = options
+  fn()
+  watchFn = undefined
+  watchOptions = undefined
 }
 
 export type ProxyNode<E> = E & { node: E }
@@ -50,21 +53,26 @@ function resetTimeout() {
   resetTimer = null
 }
 
-export function createProxy<E extends Node>(
-  node: E,
-  options?: CreateProxyOptions,
-): ProxyNode<E> {
+const proxySymbol = Symbol('proxy')
+
+function toPropertyKey(p: string) {
+  return p === 'value' || p === 'valueAsNumber' || p === 'valueAsDate'
+    ? 'value'
+    : p
+}
+
+export function createProxy<E extends Node>(node: E): ProxyNode<E> {
+  if (proxySymbol in node) {
+    return (node as any)[proxySymbol]
+  }
   const deps = new Map<string, Set<() => void>>()
-  const listenEventType = options?.listen ?? 'input'
   const proxy = new Proxy(node, {
     get(target, p, receiver) {
+      const listenEventType = watchOptions?.listen ?? 'input'
       if (listenEventType && watchFn && typeof p === 'string') {
-        const key =
-          p === 'value' || p === 'valueAsNumber' || p === 'valueAsDate'
-            ? 'value'
-            : p
+        const key = toPropertyKey(p)
         const fn = watchFn
-        if (key === 'value') {
+        if (key === 'value' || key === 'checked') {
           target.addEventListener(
             listenEventType,
             // wrap the function to avoid the default behavior be cancelled
@@ -96,7 +104,8 @@ export function createProxy<E extends Node>(
     set(target, p, value, receiver) {
       target[p as keyof E] = value
       if (typeof p === 'string') {
-        const fns = deps.get(p)
+        const key = toPropertyKey(p)
+        const fns = deps.get(key)
         if (fns) {
           for (const fn of fns) {
             fn()
@@ -106,7 +115,7 @@ export function createProxy<E extends Node>(
       return true
     },
   })
-  return Object.assign(proxy, { node })
+  return ((node as any)[proxySymbol] = Object.assign(proxy, { node }))
 }
 
 export type NodeChild = Node | { node: Node } | string | number
@@ -115,11 +124,8 @@ export type Properties<E extends Node> = Partial<{
   [P in keyof E]?: E[P] extends object ? Partial<E[P]> : E[P]
 }>
 
-export type CreateElementOptions<E extends Node> = Properties<E> &
-  CreateProxyOptions
-
 export type PartialCreateElement<E extends Node> = (
-  props?: CreateElementOptions<E>,
+  props?: Properties<E>,
   children?: NodeChild[],
 ) => ProxyNode<E>
 
@@ -140,23 +146,23 @@ export function genCreateSVGElement<K extends keyof SVGElementTagNameMap>(
 /** @alias h, html */
 export function createHTMLElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
-  props?: CreateElementOptions<HTMLElementTagNameMap[K]>,
+  props?: Properties<HTMLElementTagNameMap[K]>,
   children?: NodeChild[],
 ) {
   const node = document.createElement<K>(tagName)
   applyAttrs(node, props, children)
-  return createProxy(node, props)
+  return createProxy(node)
 }
 
 /** @alias s, svg */
 export function createSVGElement<K extends keyof SVGElementTagNameMap>(
   tagName: K,
-  props?: CreateElementOptions<SVGElementTagNameMap[K]>,
+  props?: Properties<SVGElementTagNameMap[K]>,
   children?: NodeChild[],
 ) {
   const node = document.createElementNS('http://www.w3.org/2000/svg', tagName)
   applyAttrs(node, props, children)
-  return createProxy(node, props)
+  return createProxy(node)
 }
 
 function applyAttrs<E extends ParentNode>(

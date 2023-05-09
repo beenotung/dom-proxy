@@ -11,7 +11,15 @@ Demo: https://dom-proxy.surge.sh
 ## Quick Example
 
 ```typescript
-import { watch, input, text, fragment, label, p } from 'dom-proxy'
+// elements type are inferred from selector
+let { password, showPw } = queryElementProxies({
+  showPw: 'input#show-pw',
+  password: '[name=password]',
+})
+
+watch(() => {
+  password.type = showPw.checked ? 'text' : 'password'
+})
 
 let nameInput = input({ placeholder: 'guest', id: 'visitor-name' })
 let nameText = text()
@@ -110,30 +118,17 @@ If the selectors don't match any element, it will throw error.
 import { ProxyNode, watch } from 'dom-proxy'
 import { queryElement, queryElementProxies } from 'dom-proxy'
 
-let loginForm = queryElement<HTMLFormElement>('#loginForm')
-let elements = queryElementProxies(
+let loginForm = queryElement('form#loginForm') // infer to be HTMLFormElement
+let { password, showPw } = queryElementProxies(
   {
-    username: '[name=username]',
-    password: '[name=password]',
-    preview: '#preview',
-    reset: '[type=reset]',
-    submit: '[type=submit]',
+    showPw: 'input#show-pw', // infer to be ProxyNode<HTMLInputElement> <- "input" tagName
+    password: '[name=password]', // fallback to be ProxyNode<HTMLInputElement> <- "[name=.*]" attribute without tagName
   },
   loginForm,
 )
-const preview = elements.preview
-const username = elements.username as ProxyNode<HTMLInputElement>
-const password = elements.password as ProxyNode<HTMLInputElement>
-const reset = elements.reset as ProxyNode<HTMLInputElement>
-const submit = elements.submit as ProxyNode<HTMLInputElement>
 
 watch(() => {
-  preview.textContent = username.value + ':' + password.value
-})
-
-watch(() => {
-  reset.disabled = !username.value && !password.value
-  submit.disabled = !username.value || !password.value
+  password.type = showPw.checked ? 'text' : 'password'
 })
 ```
 
@@ -144,31 +139,45 @@ The types shown in this section are simplified, see the `.d.ts` files published 
 ### Reactive function
 
 ```typescript
-/** run once immediately, auto track dependency and re-run */
-function watch(fn: Function): void
+/** @description run once immediately, auto track dependency and re-run */
+function watch(
+  fn: Function,
+  options?: {
+    listen?: 'change' | 'input' // default 'input'
+  },
+): void
 ```
 
 ### Selector functions
 
 These query selector functions will throw error if no elements match the selectors.
 
+The corresponding element type is inferred from the tag name in the selector. (e.g. `select[name=theme]` will be inferred as `HTMLSelectElement`)
+
+If the selector doesn't contain the tag name but containing "name" attribute (e.g. `[name=password]`), the inferred type will be `HTMLInputElement`.
+
+If the element type cannot be determined, it will fallback to `Element` type.
+
 ```typescript
-function queryElement<Element>(selector: string, parent?: ParentNode): Element
-
-function queryElementProxy<Element>(
-  selector: string,
+function queryElement<Selector extends string>(
+  selector: Selector,
   parent?: ParentNode,
-): ProxyNode<Element>
+): InferElement<Selector>
 
-function queryElements<K, Element>(
-  selectors: Record<K, string>,
+function queryElementProxy<Selector extends string>(
+  selector: Selector,
   parent?: ParentNode,
-): Record<K, Element>
+): ProxyNode<InferElement<Selector>>
 
-function queryElementProxies<K, Element>(
-  selectors: Record<K, string>,
+function queryElements<SelectorDict extends Dict<string>>(
+  selectors: SelectorDict,
   parent?: ParentNode,
-): Record<K, ProxyNode<Element>>
+): { [P in keyof SelectorDict]: InferElement<SelectorDict[P]> }
+
+function queryElementProxies<SelectorDict extends Dict<string>>(
+  selectors: SelectorDict,
+  parent?: ParentNode,
+): { [P in keyof SelectorDict]: ProxyNode<InferElement<SelectorDict[P]>> }
 ```
 
 ### Creation functions
@@ -182,21 +191,18 @@ function createText(value?: string | number): ProxyNode<Text>
 /** @alias h, html */
 function createHTMLElement<K, Element>(
   tagName: K,
-  props?: Properties<Element> & CreateProxyOptions,
+  props?: Properties<Element>,
   children?: NodeChild[],
 ): ProxyNode<Element>
 
 /** @alias s, svg */
 function createSVGElement<K, SVGElement>(
   tagName: K,
-  props?: Properties<SVGElement> & CreateProxyOptions,
+  props?: Properties<SVGElement>,
   children?: NodeChild[],
 ): ProxyNode<SVGElement>
 
-function createProxy<Node>(
-  node: Node,
-  options?: CreateProxyOptions,
-): ProxyNode<Node>
+function createProxy<Node>(node: Node): ProxyNode<Node>
 ```
 
 ### Creation helper functions
@@ -329,16 +335,12 @@ type ProxyNode<E> = E & {
 
 type NodeChild = Node | ProxyNode | string | number
 
-type CreateProxyOptions = {
-  listen?: 'change' | 'input' | false
-}
-
 type Properties<E> = Partial<{
   [P in keyof E]?: E[P] extends object ? Partial<E[P]> : E[P]
 }>
 
 type PartialCreateElement<Element> = (
-  props?: Properties<Element> & CreateProxyOptions,
+  props?: Properties<Element>,
   children?: NodeChild[],
 ) => ProxyNode<Element>
 ```
