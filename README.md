@@ -1,6 +1,6 @@
 # dom-proxy
 
-Develop lightweight and declarative UI with automatic dependecy tracking without boilerplate code, VDOM, nor compiler.
+Develop lightweight and declarative UI with automatic dependency tracking in Javascript/Typescript without boilerplate code, VDOM, nor compiler.
 
 [![npm Package Version](https://img.shields.io/npm/v/dom-proxy)](https://www.npmjs.com/package/dom-proxy)
 [![Minified Package Size](https://img.shields.io/bundlephobia/min/dom-proxy)](https://bundlephobia.com/package/dom-proxy)
