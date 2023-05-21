@@ -73,6 +73,50 @@ You can also get dom-proxy directly in html via CDN:
 </script>
 ```
 
+## How it works
+
+A DOM proxy can be used to enable reactive programming by intercepting access to a DOM node's properties and triggering updates to the UI whenever those properties are changed.
+
+Here's an example of how a DOM proxy can be used to enable reactive programming:
+
+```javascript
+const nameInput = document.querySelector('input#name')
+const message = document.querySelector('p#message')
+
+const inputProxy = new Proxy(nameInput, {
+  set(target, property, value) {
+    target[property] = value
+    message.textContent = 'Hello, ' + value + '!'
+    return true
+  },
+})
+
+inputProxy.value = 'world'
+```
+
+In this example, we've created a reactive input element by creating a DOM proxy for the input element. The set trap of the proxy is used to intercept any changes made to the input's value, and it updates the output element's text content to reflect the new value.
+
+However, it is quite verbose to work with the Proxy API directly.
+
+`dom-proxy` allows you to do reactive programming concisely. With `dom-proxy`, above example can be written as:
+
+```javascript
+let { nameInput, message } = queryElementProxies({
+  nameInput: 'input#name',
+  message: 'p#message',
+})
+
+watch(() => {
+  message.textContent = 'Hello, ' + nameInput.value + '!'
+})
+
+nameInput.value = 'world'
+```
+
+In above example, the `textContent` of `message` depends on the `value` of `nameInput`, this dependency is automatically tracked without explicitly coding.
+
+This is in contrast to `useEffect()` in `React` where you have to manually maintain the dependency list. Also, `dom-proxy` works in mutable manner, hence we don't need to run "diffing" algorithm on VDOM to reconciliate the UI.
+
 ## Usage Examples
 
 More examples can be found in [./demo](./demo):
