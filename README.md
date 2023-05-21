@@ -21,6 +21,7 @@ watch(() => {
   password.type = showPw.checked ? 'text' : 'password'
 })
 
+// create new element or text node, then proxy on it
 let nameInput = input({ placeholder: 'guest', id: 'visitor-name' })
 let nameText = text()
 
