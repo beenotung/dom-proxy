@@ -10,7 +10,7 @@ Demo: https://dom-proxy.surge.sh
 
 ## Quick Example
 
-```typescript
+```javascript
 // elements type are inferred from selector
 let { password, showPw } = queryElementProxies({
   showPw: 'input#show-pw',
