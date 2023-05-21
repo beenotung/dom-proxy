@@ -8,6 +8,22 @@ Develop lightweight and declarative UI with automatic dependency tracking in Jav
 
 Demo: https://dom-proxy.surge.sh
 
+## Table of Content
+
+- [Quick Example](#quick-example)
+- [Installation](#installation)
+- [How it works](#how-it-works)
+- [Usage Examples](#usage-examples)
+  - [Example using creation functions](#example-using-creation-functions)
+  - [Example using selector functions](#example-using-selector-functions)
+- [Typescript Signature](#typescript-signature)
+  - [Reactive function](#reactive-function)
+  - [Selector functions](#selector-functions)
+  - [Creation functions](#creation-functions)
+  - [Creation helper functions](#creation-helper-functions)
+  - [Options Types / Output Types](#options-types--output-types)
+- [FOSS License](#license)
+
 ## Quick Example
 
 ```javascript
