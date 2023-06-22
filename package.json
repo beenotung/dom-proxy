@@ -1,12 +1,12 @@
 {
   "name": "dom-proxy",
   "version": "2.0.1",
-  "description": "Develop declarative UI with (opt-in) automatic dependecy tracking without boilerplate code, VDOM, nor compiler.",
+  "description": "Develop declarative UI with (opt-in) automatic dependency tracking without boilerplate code, VDOM, nor compiler.",
   "keywords": [
     "DOM",
     "proxy",
     "reactive",
-    "declaraive",
+    "declarative",
     "dependency tracking",
     "state management",
     "typescript",

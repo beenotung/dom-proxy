@@ -146,7 +146,7 @@ More examples can be found in [./demo](./demo):
 
 This example consists of a input and text message.
 
-With the `watch()` function, the text message is initialied and updated according to the input value. We don't need to specify the dependency explicitly.
+With the `watch()` function, the text message is initialized and updated according to the input value. We don't need to specify the dependency explicitly.
 
 ```typescript
 import { watch, input, span, label, fragment } from 'dom-proxy'
