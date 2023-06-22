@@ -18,6 +18,22 @@ export function queryElementProxy<Selector extends string>(
   return createProxy(queryElement<Selector>(selector, parent))
 }
 
+export function queryAllElements<Selector extends string>(
+  selector: Selector,
+  parent: ParentNode = document.body,
+) {
+  let elements = parent.querySelectorAll<SelectorElement<Selector>>(selector)
+  return Array.from(elements)
+}
+
+export function queryAllElementProxies<Selector extends string>(
+  selector: Selector,
+  parent: ParentNode = document.body,
+) {
+  let elements = parent.querySelectorAll<SelectorElement<Selector>>(selector)
+  return Array.from(elements, element => createProxy(element))
+}
+
 /** @throws Error if any selectors don't match any elements */
 export function queryElements<
   SelectorDict extends Dict<Selector>,

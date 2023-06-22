@@ -211,7 +211,7 @@ function watch(
 
 ### Selector functions
 
-These query selector functions will throw error if no elements match the selectors.
+These query selector functions (except `queryAll*()`) will throw error if no elements match the selectors.
 
 The corresponding element type is inferred from the tag name in the selector. (e.g. `select[name=theme]` will be inferred as `HTMLSelectElement`)
 
@@ -229,6 +229,16 @@ function queryElementProxy<Selector extends string>(
   selector: Selector,
   parent?: ParentNode,
 ): ProxyNode<InferElement<Selector>>
+
+function queryAllElements<Selector extends string>(
+  selector: Selector,
+  parent?: ParentNode,
+): InferElement<Selector>[]
+
+function queryAllElementProxies<Selector extends string>(
+  selector: Selector,
+  parent?: ParentNode,
+): ProxyNode<InferElement<Selector>>[]
 
 function queryElements<SelectorDict extends Dict<string>>(
   selectors: SelectorDict,
