@@ -13,6 +13,6 @@ document.body.appendChild(
   fragment([
     label({ textContent: 'name: ', htmlFor: nameInput.id }),
     nameInput,
-    p({}, ['hello, ', nameText]),
+    p(['hello, ', nameText]),
   ]),
 )

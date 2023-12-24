@@ -50,7 +50,7 @@ document.body.appendChild(
   fragment([
     label({ textContent: 'name: ', htmlFor: nameInput.id }),
     nameInput,
-    p({}, ['hello, ', nameText]),
+    p(['hello, ', nameText]),
   ]),
 )
 ```
@@ -164,7 +164,7 @@ document.body.appendChild(
   fragment([
     label({ textContent: 'name: ', htmlFor: nameInput.id }),
     nameInput,
-    p({}, ['hello, ', nameSpan]),
+    p(['hello, ', nameSpan]),
   ]),
 )
 ```
@@ -330,7 +330,7 @@ The creation functions are defined dynamically in the proxy object `createHTMLEl
 If you prefer to rename them with different naming conventions, you can destruct from the proxy object using your preferred name. For example:
 
 ```typescript
-const { s, style, var_ } = createHTMLElementFunctions
+const { s, style, var: var_ } = createHTMLElementFunctions
 const { a, text } = createSVGElementFunctions
 const {
   html: { a: html_a, style: htmlStyle },
@@ -410,10 +410,10 @@ type Properties<E> = Partial<{
   [P in keyof E]?: E[P] extends object ? Partial<E[P]> : E[P]
 }>
 
-type PartialCreateElement<Element> = (
-  props?: Properties<Element>,
-  children?: NodeChild[],
-) => ProxyNode<Element>
+interface PartialCreateElement<Element> {
+  (props?: Properties<Element>, children?: NodeChild[]): ProxyNode<Element>
+  (children?: NodeChild[]): ProxyNode<Element>
+}
 ```
 
 ## License

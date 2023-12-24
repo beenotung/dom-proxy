@@ -124,23 +124,37 @@ export type Properties<E extends Node> = Partial<{
   [P in keyof E]?: E[P] extends object ? Partial<E[P]> : E[P]
 }>
 
-export type PartialCreateElement<E extends Node> = (
-  props?: Properties<E>,
-  children?: NodeChild[],
-) => ProxyNode<E>
+export interface PartialCreateElement<E extends Node> {
+  (props?: Properties<E>, children?: NodeChild[]): ProxyNode<E>
+  (children?: NodeChild[]): ProxyNode<E>
+}
 
 /** @description higher-function, partially applied createHTMLElement */
 export function genCreateHTMLElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
 ): PartialCreateElement<HTMLElementTagNameMap[K]> {
-  return (props, children) => createHTMLElement(tagName, props, children)
+  return (props_or_children?, children?) =>
+    Array.isArray(props_or_children)
+      ? createHTMLElement(tagName, undefined, props_or_children)
+      : createHTMLElement(
+          tagName,
+          props_or_children,
+          children as NodeChild[] | undefined,
+        )
 }
 
 /** @description higher-function, partially applied createSVGElement */
 export function genCreateSVGElement<K extends keyof SVGElementTagNameMap>(
   tagName: K,
 ): PartialCreateElement<SVGElementTagNameMap[K]> {
-  return (props, children) => createSVGElement(tagName, props, children)
+  return (props_or_children?, children?) =>
+    Array.isArray(props_or_children)
+      ? createSVGElement(tagName, undefined, props_or_children)
+      : createSVGElement(
+          tagName,
+          props_or_children,
+          children as NodeChild[] | undefined,
+        )
 }
 
 /** @alias h, html */

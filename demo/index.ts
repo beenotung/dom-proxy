@@ -5,7 +5,7 @@ console.log('ts')
 console.time('init')
 
 document.body.appendChild(
-  h1({}, [
+  h1([
     'dom-proxy demo',
     a({ textContent: 'git', href: 'https://github.com/beenotung/dom-proxy' }),
     a({ textContent: 'npm', href: 'https://www.npmjs.com/package/dom-proxy' }),
@@ -14,7 +14,7 @@ document.body.appendChild(
 )
 
 document.body.appendChild(
-  p({}, [
+  p([
     "This interactive page is created entirely in Typescript using dom-proxy's creation helper functions and auto-tracking ",
     code({ textContent: 'watch()' }),
     ' function.',
@@ -57,7 +57,7 @@ document.body.appendChild(
     h2({ textContent: 'change event demo' }),
     label({ textContent: 'name: ', htmlFor: nameInput.id }),
     nameInput,
-    p({}, ['hello, ', nameText, greetDotsText]),
+    p(['hello, ', nameText, greetDotsText]),
   ]),
 )
 

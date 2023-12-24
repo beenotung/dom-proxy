@@ -64,7 +64,7 @@ let signupForm = form({ onsubmit: submitForm }, [
   avatarImg,
   inputField(passwordInput),
   inputField(confirmPasswordInput),
-  p({}, ['preview: ', previewText]),
+  p(['preview: ', previewText]),
   input({ type: 'submit', value: 'Sign Up' }),
 ])
 
