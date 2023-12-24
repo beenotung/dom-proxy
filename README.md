@@ -21,6 +21,7 @@ Demo: https://dom-proxy.surge.sh
   - [Selector functions](#selector-functions)
   - [Creation functions](#creation-functions)
   - [Creation helper functions](#creation-helper-functions)
+  - [Partially applied creation functions](#partially-applied-creation-functions)
   - [Options Types / Output Types](#options-types--output-types)
 - [FOSS License](#license)
 
