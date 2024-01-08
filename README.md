@@ -331,8 +331,11 @@ The creation functions are defined dynamically in the proxy object `createHTMLEl
 If you prefer to rename them with different naming conventions, you can destruct from the proxy object using your preferred name. For example:
 
 ```typescript
+// you can destruct into custom alias from `createHTMLElementFunctions`
 const { s, style, var: var_ } = createHTMLElementFunctions
+// or destruct from `createSVGElementFunctions`
 const { a, text } = createSVGElementFunctions
+// or destruct from createElementFunctions, which wraps above two objects as `html` and `svg`
 const {
   html: { a: html_a, style: htmlStyle },
   svg: { a: svg_a, style: svgStyle },
