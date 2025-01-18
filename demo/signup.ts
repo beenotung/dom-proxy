@@ -1,8 +1,13 @@
 import { appendChild, text, watch } from '../core'
-import { div, form, input, label, p, br, img } from '../helpers'
+import { div, form, input, label, p, br, img, select, option } from '../helpers'
 import { selectImage } from '@beenotung/tslib/file'
 import { compressMobilePhoto } from '@beenotung/tslib/image'
 
+let roleSelect = select({ id: 'role', value: 'student' }, [
+  option({ value: 'parent', text: 'Parent' }),
+  option({ value: 'teacher', text: 'Teacher' }),
+  option({ value: 'student', text: 'Student' }),
+])
 let usernameInput = input({ id: 'username' })
 let passwordInput = input({ id: 'password', type: 'password' })
 let confirmPasswordInput = input({ id: 'confirm-password', type: 'password' })
@@ -21,7 +26,8 @@ let previewText = text()
 let isValid = false
 
 watch(() => {
-  previewText.textContent = usernameInput.value + ':' + passwordInput.value
+  previewText.textContent =
+    `(${roleSelect.value}) ` + usernameInput.value + ':' + passwordInput.value
 })
 
 watch(() => {
@@ -30,7 +36,7 @@ watch(() => {
   confirmPasswordInput.style.outline = '3px solid ' + color
 })
 
-function inputField(input: HTMLInputElement) {
+function inputField(input: HTMLInputElement | HTMLSelectElement) {
   let inputFieldDiv = div({ className: 'input-field' }, [
     label({ textContent: input.id + ': ', htmlFor: input.id }),
     br(),
@@ -59,6 +65,7 @@ function submitForm(event: Event) {
 }
 
 let signupForm = form({ onsubmit: submitForm }, [
+  inputField(roleSelect),
   inputField(usernameInput),
   inputField(avatarInput),
   avatarImg,

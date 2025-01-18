@@ -200,6 +200,17 @@ function applyAttrs<E extends ParentNode>(
       appendChild(node, child)
     }
   }
+
+  // to set the value of select after all the options are appended
+  if (
+    node instanceof HTMLSelectElement &&
+    children &&
+    children.length > 0 &&
+    props &&
+    'value' in props
+  ) {
+    node.value = props.value as string
+  }
 }
 
 export function appendChild(
